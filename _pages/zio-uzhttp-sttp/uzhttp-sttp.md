@@ -41,7 +41,7 @@ object Hello1Routes {
 }
 ```
 
-So that's pretty simple - it's a PartialFunction taking a uzhttp.Request and returning an IO[HTTPError, Response]. It doesn't do a lot!.
+So that's pretty simple - it's a PartialFunction taking a uzhttp.Request and returning an `IO[HTTPError, Response]`. It doesn't do a lot!.
 
 Here's the test
 ```scala
@@ -93,7 +93,7 @@ The server is a bit more work. We call the function serverLayer with the partial
   )
 ```
 
-The uzhttp4s Server.builder has a builder pattern to create and start the builder. It returns a ZIO Managed which we can simply wrap up in the ZLayer.fromManaged to give the layer.
+The uzhttp4s Server.builder has a builder pattern to create and start the builder. It returns a ZIO Managed which we can simply wrap up in the `ZLayer.fromManaged` to give the layer.
 
 To check server is started and running
 ```scala
@@ -158,7 +158,7 @@ object Encoders {
 }
 
 ```
-So we've defined an typeclass XmlWriter[A]. In the real world I will be using a magnolia-based XmlWriter but here we have a a scala.xml dsl-based one. 
+So we've defined an typeclass `XmlWriter[A]`. In the real world I will be using a magnolia-based XmlWriter but here we have a a scala.xml dsl-based one.
 
 The code is pretty obvious, we pretty-print the xml (for testing) and then use the uzhttp Response.const function to actually create a response. There are other functions to create Responses in uzhttp. They are not documented - you will have to go and look at the source code - but take comfort - it's nice and easy to read and quite short. This code is a direct rip-off the Response.html method but with different content type
 
@@ -457,13 +457,13 @@ It's slightly more complicated due to the fact that we have a ZIO of a Managed t
 Personally, I find having long lists of PartialFunction case matches not particularly satisfactory. uzhttp authors say they had no intention of making a DSL but can we make our code more fluent.
 
 One possibility was suggested to me on the zio-users discord channe. Instead of combining partial functions, we can make it more "zio-like" with the following:
-```
+```scala
   type HRequest = Has[Request]
 
   type EndPoint[R <: HRequest] = ZIO[R, Option[HTTPError], Response]
 ```
 
-Much like our partial function, it takes a request and returns a response. But what's the Option[HTTPError] about? Essentially, what it does is allows us to give us 3 return possibilities:
+Much like our partial function, it takes a request and returns a response. But what's the `Option[HTTPError]` about? Essentially, what it does is allows us to give us 3 return possibilities:
 - the Response, if our EndPoint matches the request
 - An error of Some(error) if there's something wrong with the Request
 - An "error" of None - if the EndPoint doesn't match the response

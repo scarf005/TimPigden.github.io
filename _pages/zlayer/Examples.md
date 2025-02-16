@@ -114,7 +114,7 @@ The point about Teams is to test dependencies between modules that we've created
 ```
 Teams will pick a team from the available names, making _size_ selections. 
 
-Following Module usage patterns, although **pickTeam** needs a Names to function, we don't put it in as a ZIO[Names, Nothing, Set[String]] - instead we hold a reference in the **TeamsImpl**
+Following Module usage patterns, although **pickTeam** needs a Names to function, we don't put it in as a `ZIO[Names, Nothing, Set[String]]` - instead we hold a reference in the **TeamsImpl**
 
 Our first test is straight-forward
 ```scala
@@ -226,7 +226,7 @@ And that's it.
 
 ## Throwable Errors
 
-The above code all assumes you're returning ZLayer[R, Nothing, T] - in other words the construction of the environment service has Nothing type. But if it's doing something like reading from a file or a database, then very likely it will be ZLayer[R, Throwable, T] - because that sort of thing often involves precisely the sort of external effect that will throw an exception. So imagine Names construction had a throwable error. For your tests, the way to get round it is like this:
+The above code all assumes you're returning `ZLayer[R, Nothing, T]` - in other words the construction of the environment service has Nothing type. But if it's doing something like reading from a file or a database, then very likely it will be `ZLayer[R, Throwable, T]` - because that sort of thing often involves precisely the sort of external effect that will throw an exception. So imagine Names construction had a throwable error. For your tests, the way to get round it is like this:
 ```scala
   val live: ZLayer[Random, Throwable, Names] = ???
 ```
