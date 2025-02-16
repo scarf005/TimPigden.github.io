@@ -13,7 +13,7 @@ A few months ago I wrote a blog on [using http4s from zio](../zio-http4s/intro.m
 
 In that blog I went into quite a lot of detail looking at authentication and at encoding, because both had proved time-consuming to get right.
 
-Recently, a new zio-based been launched by the authors of the [polynote](https://polynote.org/) - the netflix-originated analytics notebook. (uzhttp)[(https://github.com/polynote/uzhttp)] is a micro-http server - it's very lightweight and comes with no bells and whistles, though it does support websockets. It's used in polynote apparently. But it does come with a health warning - and may be too micro for most people.
+Recently, a new zio-based been launched by the authors of the [polynote](https://polynote.org/) - the netflix-originated analytics notebook. [uzhttp](https://github.com/polynote/uzhttp) is a micro-http server - it's very lightweight and comes with no bells and whistles, though it does support websockets. It's used in polynote apparently. But it does come with a health warning - and may be too micro for most people.
 
 Nevertheless, I thought I'd compare it with the http4s solution to see how easy it was to work with. And this blog shows the first fruits.
 
@@ -22,7 +22,7 @@ All source code is on my [github](https://github.com/TimPigden/zio-http4s-exampl
 Thanks to the zio regulars who gave me tips in this work plus Jeremy Smith from polynote.org. Please comment or drop me a line if there are any errors or omissions or opportunities to improve the blog or the code.
 
 ## Client
-Http4s provides both a server and a client. And we need both a server and a client for our testing. So rather than re-use http4s I thought I'd try (sttp)[https://github.com/softwaremill/sttp]. Unlike uzhttp, sttp is a battled hardend scala http client solution that's been around quite a while. It has versions for a variety of backend and is pretty comprehensive. Importantly, one of those backends is a Netty-based zio implementation and this is what we shall be using.
+Http4s provides both a server and a client. And we need both a server and a client for our testing. So rather than re-use http4s I thought I'd try [sttp](https://github.com/softwaremill/sttp). Unlike uzhttp, sttp is a battled hardend scala http client solution that's been around quite a while. It has versions for a variety of backend and is pretty comprehensive. Importantly, one of those backends is a Netty-based zio implementation and this is what we shall be using.
 
 I'm not going to go into detail of sttp - it's very well documented and was really easy to use, so just go and look at the website
 
@@ -79,7 +79,7 @@ Two tests, each of which checks the server is running and then uses SttpClient t
 
 Because the test is running across the wire, you won't see any uzhttp code or types here. We just need to know that the server is started and is running.
 
-The actual work is done in the ZIO layers that have been created - see Zio documentation and [my previous blog]()../zlayer/Examples.md) for more about Zio layers. This article assumes you have familiarity with the concept.
+The actual work is done in the ZIO layers that have been created - see Zio documentation and [my previous blog](../zlayer/Examples.md) for more about Zio layers. This article assumes you have familiarity with the concept.
 
 So we're creating 2 layers - the first is the client. This puts SttpClient.send .. into our context. It's created with a direct call to ```AsyncHttpClientZioBackend.layer()``` 
 and that's it. Like I said - really simple.
