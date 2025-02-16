@@ -147,7 +147,7 @@ created namesImpl
 [36mRan 1 test in 225 ms: 1 succeeded, 0 ignored, 0 failed[0m
 ```
 Looking back to the definition of NamesImpl
-```
+```scala
     case class NamesImpl(random: Random.Service) extends Names.Service {
       println(s"created namesImpl")
       def randomName = 
@@ -239,7 +239,7 @@ The mapError turns the throwable into a test failure - which is what you want - 
 ## More ZEnv Cases
 
 The "standard" environment items include clock and random. In out Names, we used Random. But what if we also want one of these items further "down" our dependencies. For this purpose I've created a second version of History - History2 - and this needs Clock to create an instance.
-```
+```scala
   object History2 {
     
     trait Service {
@@ -260,13 +260,13 @@ The "standard" environment items include clock and random. In out Names, we used
   }
 ```
 It's not a very useful example - but the important part is that the line
-```
+```scala
         someTime <- ZIO.accessM[Clock](_.get.nanoTime)        
 ```
 forces us to provide a clock in the right place.
 
 Now the .provideCustomLayer can add our layer to layer stack and it magically pushes the Random into Names. But it will not do that for the clock, which is required further down, in History2. So the following code does NOT compile:
-```
+```scala
   def wonLastYear2 = testM("won last year") {
     for {
       team <- teams.pickTeam(5)

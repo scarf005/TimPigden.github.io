@@ -25,7 +25,7 @@ bit to get it working.
 I used [Easy Ways to Generate Test Data in Kafka](https://www.confluent.io/blog/easy-ways-generate-test-data-kafka)
 
 First we create topic2 using datagen. I used the sample datagen-users.json file.
-```
+```json
 {
   "name": "datagen-users",
   "config": {
@@ -44,6 +44,6 @@ First we create topic2 using datagen. I used the sample datagen-users.json file.
 which I put in the streams/assets folder of the source for the project.
 
 
-```
+```sh
 confluent local config datagen-users -- -d ./datagen-users.json
 ```

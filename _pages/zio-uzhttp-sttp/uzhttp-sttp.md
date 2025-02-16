@@ -110,7 +110,8 @@ case class Person(name: String, age: Int)
 object Person {
   val donald = Person("Donald Trump", 73)
   val joe = Person("Joe Biden", 76)
-}```
+}
+```
 
 We obviously need to get and post data, so our XmlRoutes is a bit more involved:
 ```scala
@@ -295,7 +296,7 @@ object Authorizer {
 Essentially the Authorizer takes an access token which has been provided by the external environment. It will then validate this to return AuthInfo - in this case just a wrapped string but in reality will be something more complex (and yes in real world probably tokens will expire and so on)
 
 Next we provide a dummy Authorizer
-```
+```scala
   val friendlyAuthorizer: Service = { token =>
     token match {
       case "friend" => IO.succeed(AuthInfo("Vetted"))
@@ -497,11 +498,11 @@ where the helper methods are things like:
 ```
 
 So that's individual EndPoints. How do we chain them together - what is the equivalent to "orElse". So looking through the zio RC18-2 I couldn't see a really slick way of doing this. Asking on the Discord channel, essentially elicited the response, there's nothing there yet, ok, we've just done something. So in zio RC19 or 1.0.0 or a current (post about April 20th) SNAPSHOT you will be able to do this:
-```
+```scala
 val routes = president orElseOptional  contender orElseOptional whatIsMyName
 ```
 But for the impatient, I've got the following:
-```
+```scala
   def combineRoutes[R <: HRequest](h: EndPoint[R], t: EndPoint[R]*): EndPoint[R] =
     t.foldLeft(h)((acc, it) =>
       acc catchSome { case None => it }
